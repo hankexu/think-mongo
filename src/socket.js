@@ -7,8 +7,6 @@ const querystring = require('querystring');
 const CREATE_POOL = Symbol('think-mongo-create-pool');
 const POOL = Symbol('think-mongo-pool');
 
-const mongoConnect = helper.promisify(mongodb.MongoClient.connect, mongodb.MongoClient);
-
 const defaultOptions = {
   host: '127.0.0.1',
   port: 27017,
@@ -62,7 +60,7 @@ class MongoSocket {
         if (config.logConnect) {
           config.logger(connectStr);
         }
-        return mongoConnect(connectStr, {useUnifiedTopology: true});
+        return new mongodb.MongoClient(connectStr, {useUnifiedTopology: true});
       },
       destroy: client => {
         client.close();
